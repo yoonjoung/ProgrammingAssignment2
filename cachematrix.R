@@ -1,6 +1,8 @@
-## Put comments here that give an overall description of what your
-## functions do
-
+## there are two functions. 
+## 1. makeCacheMatrix 
+## It creates a list of four objects. "setinv" calculates inverse.
+## 2. casheSolve
+## It calls saved (or cached) inverse already calculated for a matrix, which is defined with "set"
 
 # 1.
 ## This function creates a special "matrix" object 
@@ -16,10 +18,11 @@ makeCacheMatrix <- function(x = matrix()) {
   #GET the value of the matrix
   get <- function() x
   #SET the value of the inverse 
-  setinv <- function(inv) m <<- inv
+  setinv <- function(inv) m <<- solve
   #GET the value of the inverse 
   getinv <- function() m
-  list(set = set, get = get,
+  list(set = set, 
+       get = get,
        setinv = setinv,
        getinv = getinv)
 }
@@ -41,17 +44,31 @@ cacheSolve <- function(x, ...) {
     return(m)
   }
   data <- x$get()
-  m <- inv(data, ...)
+  m <- solve(data, ...)
   x$setinv(m)
   m   
 }
 
 ################################
-# how to get inverse & an example
+# example of a matrix and its inverse 
 A <- matrix( c(5, 1, 0,
                3,-1, 2,
                4, 0,-1), nrow=3, byrow=TRUE)
 A
 
-AI  <- inv(A)
+AI  <- solve(A)
+AI
+
+################################
+# SOLUTION for the assignment 
+
+aMatrix <- makeCacheMatrix(1:10)
+aMatrix$get()       # retrieve the value of x
+aMatrix$getinv()    # retrieve the value of m, which should be NULL
+
+aMatrix$set(A)      # reset x with a new matrix A
+aMatrix$getinv()    # still Null   
+
+aMatrix$set(A)          # reset x with a new matrix A
+cacheSolve(aMatrix)     # inverse calculated for the matrix A, not x - from the saved/cashed values. Check if it's same with AI
 AI
